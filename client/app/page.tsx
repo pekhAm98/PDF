@@ -14,7 +14,7 @@ const Page = () => {
 
   useEffect(() => {
     axios
-      .get(process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000")
+      .get(process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000")
       .then((response) => {
         if (response.status === 200) {
           setMessage("Server is up and running!");
@@ -48,7 +48,7 @@ const Page = () => {
     formData.append("file", selectedFile);
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/upload`, formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000"}/api/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
