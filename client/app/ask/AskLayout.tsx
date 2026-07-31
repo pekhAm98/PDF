@@ -6,7 +6,7 @@ import DocumentPanel from "./DocumentPanel";
 
 export default function AskLayout() {
   return (
-    <main className="flex h-[calc(100vh-4rem)] flex-col overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <main className="flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       {/* Main Content */}
       <div className="flex flex-1 gap-4 overflow-hidden p-4">
         {/* Document */}
@@ -21,7 +21,7 @@ export default function AskLayout() {
       </div>
 
       {/* Bottom Input */}
-      <footer className="border-t border-white/10 bg-slate-950/70 px-4 py-4 backdrop-blur-xl">
+      <footer className="z-20 shrink-0 border-t border-white/10 bg-slate-950/70 px-4 py-4 backdrop-blur-xl pb-[max(1rem,env(safe-area-inset-bottom))]">
         <ChatInput />
       </footer>
     </main>

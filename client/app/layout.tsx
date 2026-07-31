@@ -29,26 +29,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="min-h-screen bg-[#050816] text-white antialiased">
+      <body className="h-dvh bg-[#050816] text-white antialiased">
         <ClerkProvider>
           <Show when="signed-out">
             <LoginPage />
           </Show>
 
           <Show when="signed-in">
-            {/* Full-width header */}
-            <ProjectHeader>
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: "h-10 w-10",
-                  },
-                }}
-              />
-              <SignOutButton>
-                <button
-                  type="button"
-                  className="
+            <div className="flex h-dvh min-h-0 flex-col overflow-hidden">
+              {/* Full-width header */}
+              <ProjectHeader>
+                <UserButton
+                  appearance={{
+                    elements: {
+                      avatarBox: "h-10 w-10",
+                    },
+                  }}
+                />
+                <SignOutButton>
+                  <button
+                    type="button"
+                    className="
 ml-2
 rounded-xl
 bg-gradient-to-r
@@ -65,14 +66,15 @@ hover:scale-105
 hover:shadow-[0_0_35px_rgba(239,68,68,.7)]
 active:scale-95
 "
-                >
-                  Sign Out
-                </button>
-              </SignOutButton>
-            </ProjectHeader>
+                  >
+                    Sign Out
+                  </button>
+                </SignOutButton>
+              </ProjectHeader>
 
-            {/* Full-width page content */}
-            <main className="w-full">{children}</main>
+              {/* Full-width page content */}
+              <main className="min-h-0 w-full flex-1 overflow-hidden">{children}</main>
+            </div>
           </Show>
           <Toaster richColors position="top-right" theme="dark" closeButton />
         </ClerkProvider>
