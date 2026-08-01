@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import uploadRoutes from './routes/uploadRoutes';
+import askAiRoutes from './routes/askAiRoutes';
+
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/upload', uploadRoutes);
+
+app.use("/api/askAi", askAiRoutes);
 
 app.use((err: unknown, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (err instanceof multer.MulterError) {

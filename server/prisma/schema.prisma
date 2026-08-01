@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model File {
+  id        String     @id @default(cuid())
+  fileName  String
+  mimeType  String
+  size      Int
+  data      Bytes
+  status    FileStatus @default(UPLOADED)
+  createdAt DateTime   @default(now())
+}
+
+enum FileStatus {
+  UPLOADED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
