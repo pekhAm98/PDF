@@ -6,7 +6,7 @@ const router = Router();
 
 
 
-router.get("/", askAi);
+router.post("/", askAi);
 
 export default router;
 

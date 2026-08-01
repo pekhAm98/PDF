@@ -1,3 +1,5 @@
+"use client";
+
 import { Bot, Sparkles } from "lucide-react";
 import { SignInButton, SignUpButton } from "@clerk/nextjs";
 

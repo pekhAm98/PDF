@@ -1,24 +1,24 @@
+import { useEffect, useRef } from "react";
 import ChatMessage from "./ChatMessage";
 
-export default function ChatMessages() {
+import type { ChatMessage as ChatMessageType } from "@/store/slices/chatSlice";
+
+export default function ChatMessages({ messages }: { messages: ChatMessageType[] }) {
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
+
   return (
-    <div className="flex-1 overflow-y-auto px-5 py-6">
-      <div className="mx-auto flex max-w-3xl flex-col gap-6">
-        <ChatMessage
-          role="assistant"
-          content="👋 Hello! I'm your AI document assistant. Ask me anything about this document, and I'll answer using its contents."
-        />
-
-        <ChatMessage
-          role="user"
-          content="Can you summarize the first chapter?"
-        />
-
-        <ChatMessage
-          role="assistant"
-          content="The first chapter introduces the fundamental concepts of operating systems, explains their purpose, and discusses how they manage hardware resources while providing services to applications."
-          sources={[1, 2]}
-        />
+    <div className="flex-1 overflow-y-auto px-3 py-6 sm:px-4 lg:px-5">
+      <div className="flex w-full flex-col gap-6">
+        {messages.map((message) => (
+          <ChatMessage key={message.id} role={message.role} content={message.content} sources={message.sources ? message.sources : []} />
+        ))}
+        <div ref={bottomRef} />
       </div>
     </div>
   );

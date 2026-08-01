@@ -14,6 +14,8 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     res.json({ message: 'Hello from the server!' });
@@ -21,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/upload', uploadRoutes);
 
-app.use("/api/askAi", askAiRoutes);
+app.use("/api/chat", askAiRoutes);
 
 app.use((err: unknown, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (err instanceof multer.MulterError) {

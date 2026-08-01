@@ -8,7 +8,13 @@ import { useUser } from "@clerk/nextjs";
 type ChatMessageProps = {
   role: "user" | "assistant";
   content: string;
-  sources?: number[];
+  sources?: Array<{
+    pageContent: string;
+    metadata: {
+      pdf: string;
+      page: number;
+    };
+  }>;
 };
 
 export default function ChatMessage({ role, content, sources }: ChatMessageProps) {
@@ -22,7 +28,7 @@ export default function ChatMessage({ role, content, sources }: ChatMessageProps
         </div>
       )}
 
-      <div className={`max-w-[80%] rounded-2xl border px-5 py-4 backdrop-blur-xl ${isAssistant ? "border-white/10 bg-white/5" : "border-cyan-400/20 bg-cyan-500/10"}`}>
+      <div className={`max-w-[92%] rounded-2xl border px-5 py-4 backdrop-blur-xl lg:max-w-[88%] ${isAssistant ? "border-white/10 bg-white/5" : "border-cyan-400/20 bg-cyan-500/10"}`}>
         <p className="whitespace-pre-wrap text-[15px] leading-7 text-slate-200">{content}</p>
 
         {isAssistant && sources && sources.length > 0 && (
@@ -30,8 +36,8 @@ export default function ChatMessage({ role, content, sources }: ChatMessageProps
             <p className="mb-3 text-xs font-medium uppercase tracking-wider text-emerald-400">Sources</p>
 
             <div className="flex flex-wrap gap-2">
-              {sources.map((page) => (
-                <Citation key={page} page={page} />
+              {sources.map((source, index) => (
+                <Citation key={`${source.metadata.pdf}-${source.metadata.page}-${index}`} page={source.metadata.page} />
               ))}
             </div>
           </div>

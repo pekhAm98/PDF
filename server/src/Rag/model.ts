@@ -2,7 +2,19 @@ import { OpenAI } from "openai";
 import type { DocumentInterface } from "@langchain/core/documents";
 
 const context: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [];
-const systemPrompt = "You are a helpful assistant that answers questions based on the provided context. If the answer is not contained within the context, respond with 'I don't know.'"
+const systemPrompt = `
+You are a helpful AI assistant.
+
+You have access to document context when answering questions about uploaded documents.
+
+Rules:
+1. If the user asks about the uploaded documents, use the provided context.
+2. If the question is general conversation or casual chat, answer normally.
+3. Do not invent information from the documents.
+4. If a document-related question cannot be answered from the context, say "I don't know based on the provided documents."
+`;
+const ollamaBaseUrl = (process.env.OLLAMA_BASE_URL || "http://localhost:11434").replace(/\/$/, "");
+const llmModel = process.env.LLM_MODEL || "llama3.2";
 
 
 context.push({
@@ -10,17 +22,19 @@ context.push({
     content: systemPrompt,
 })
 
+
+
 const ai = new OpenAI({
   apiKey: "docker",
-  baseURL: "http://localhost:12434/engines/v1",
+  baseURL:
+    process.env.QWEN_API_URL || "http://localhost:12434/engines/v1",
 });
-
 export const getLLMResponse = async (
   filteredDocuments: Array<DocumentInterface<Record<string, unknown>>>,
   query: string
 ) => {
     // Add the content of the filtered documents to the context
-    const retreivedContext = filteredDocuments
+    const retrievedContext = filteredDocuments
     .map((doc, index) => 
       `Document ${index + 1}:\n${doc.pageContent}`
     )
@@ -28,12 +42,12 @@ export const getLLMResponse = async (
 
   try {
     const response = await ai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: llmModel,
       messages: [
         ...context,
         {
           role: "system",
-          content: retreivedContext,
+          content: retrievedContext || "No relevant context found.",
         },
         {
           role: "user",
@@ -41,14 +55,15 @@ export const getLLMResponse = async (
         },
       ],
     });
+    const assistantContent = response.choices[0]?.message?.content || "I don't know.";
     context.push({
         role: "assistant",
-        content: response.choices[0].message.content,
+        content: assistantContent,
     });
-    return response.choices[0].message.content;
+    return assistantContent;
   } catch (error) {
     console.error("Error getting LLM response:", error);
-    throw error;
+    return "I don't know.";
   }
 };
 
